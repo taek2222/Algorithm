@@ -1,36 +1,31 @@
 import java.util.*;
 
 class Solution {
-    public ArrayList<Integer> solution(int[] progresses, int[] speeds) {
-        ArrayList<Integer> answer = new ArrayList<>();
+    public int[] solution(int[] progresses, int[] speeds) {
+        ArrayList<Integer> answer = new ArrayList<>(); // 정답 배열
+        ArrayDeque<Integer> deque = new ArrayDeque<>(); // 큐 생성
         
-        ArrayDeque<Integer[]> deque = new ArrayDeque<>();
         for(int i = 0; i < progresses.length; i++) {
-            // deque.addLast(progresses[i]);
-            Integer[] addArray = new Integer[2];
-            int day =(int)Math.ceil((100.0 - progresses[i])/(double)speeds[i]);
-            addArray[0] = progresses[i];
-            addArray[1] = day;
-            deque.addLast(addArray);
+            int day =(int)Math.ceil((100.0 - progresses[i])/(double)speeds[i]); // 날짜 계산
+            
+            deque.addLast(day);
         }
         
         for(int i = 0; !deque.isEmpty(); i++) {
-            Integer[] first = deque.pollFirst();
-            int day = first[1];
+            int day = deque.pollFirst();
             int total = 1;
             
-            for(Integer[] que : deque)
-                if(que[1] <= day) {
-                    deque.pollFirst();
-                    total++;
-                } else {
+            for(Integer que : deque) {
+                if(que > day)
                     break;
-                }
-            
+                
+                deque.pollFirst();
+                total++;
+            }
             answer.add(total);
         }
         
         
-        return answer;
+        return answer.stream().mapToInt(i -> i).toArray();
     }
 }
