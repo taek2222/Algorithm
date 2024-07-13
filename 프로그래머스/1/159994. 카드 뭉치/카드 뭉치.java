@@ -3,13 +3,9 @@ import java.util.*;
 class Solution {
     public String solution(String[] cards1, String[] cards2, String[] goal) {
         
-        Queue<String> card1 = new ArrayDeque<>();
-        Queue<String> card2 = new ArrayDeque<>();
-        
-        for(String card : cards1)
-            card1.add(card);
-        for(String card : cards2)
-            card2.add(card);
+        ArrayDeque<String> card1 = new ArrayDeque<>(Arrays.asList(cards1));
+        ArrayDeque<String> card2 = new ArrayDeque<>(Arrays.asList(cards2));
+    
         
         for(String g : goal) {
             if(!card1.isEmpty() && card1.peek().equals(g)) {
