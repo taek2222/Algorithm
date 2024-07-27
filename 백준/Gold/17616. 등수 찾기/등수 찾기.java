@@ -7,7 +7,7 @@ import java.util.Arrays;
 class Main {
 
     static boolean[] visit;
-    static ArrayList<Integer>[] list;
+    static int count;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,11 +17,14 @@ class Main {
         int M = Integer.parseInt(NMX[1]);
         int X = Integer.parseInt(NMX[2]);
 
-        visit = new boolean[N+1];
-        list = new ArrayList[N+1];
+        ArrayList<Integer>[] list = new ArrayList[N+1];
+        ArrayList<Integer>[] reversList = new ArrayList[N+1];
 
-        for (int i = 0; i <= N; i++)
+        for (int i = 0; i <= N; i++) {
             list[i] = new ArrayList<>();
+            reversList[i] = new ArrayList<>();
+
+        }
 
         for (int i = 0; i < M; i++) {
             String[] AB = br.readLine().split(" ");
@@ -29,33 +32,33 @@ class Main {
             int B = Integer.parseInt(AB[1]);
 
             list[A].add(B);
+            reversList[B].add(A);
         }
 
-        DFS(X);
+        visit = new boolean[N+1];
+        count = 0;
 
-        int max = 1, min = 1;
-        for(int i = 1; i < visit.length; i++) {
-            if (visit[i])
-                continue;
+        DFS(X, list);
+        int V = N - count + 1;
 
-            min++;
-            for(int j = 0; j < list[i].size(); j++) {
-                if(list[i].get(j) == X)
-                    max++;
-            }
-        }
+        visit = new boolean[N+1];
+        count = 0;
 
-        System.out.println(max + " " + min);
+        DFS(X, reversList);
+        int U = count;
+
+        System.out.println(U + " " + V);
     }
 
-    private static void DFS(int x) {
+    private static void DFS(int x, ArrayList<Integer>[] list) {
         ArrayList<Integer> arrayList = list[x];
         visit[x] = true;
+        count++;
 
         for (int i : arrayList) {
             if(visit[i])
                 continue;
-            DFS(i);
+            DFS(i, list);
         }
     }
 }
