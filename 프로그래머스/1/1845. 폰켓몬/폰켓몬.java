@@ -1,17 +1,13 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
     public int solution(int[] nums) {
         
-        HashSet<Integer> numHash = new HashSet<>();
+        HashSet<Integer> numHash = Arrays.stream(nums).boxed().collect(Collectors.toCollection(HashSet::new));
         
-        for(int num : nums)
-            numHash.add(num);
+        int size = nums.length / 2;
         
-        int size = nums.length;
-        
-        if(numHash.size() < size / 2)
-            return numHash.size();
-        else return (size / 2);
+        return Math.min(size, numHash.size());
     }
 }
