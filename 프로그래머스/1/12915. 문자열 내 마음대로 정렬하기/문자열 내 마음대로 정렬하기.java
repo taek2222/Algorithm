@@ -2,19 +2,9 @@ import java.util.*;
 
 class Solution {
     public String[] solution(String[] strings, int n) {
-        String[] answer = new String[strings.length];
+        Arrays.sort(strings, (o1, o2) -> o1.charAt(n) == o2.charAt(n) ?
+                   o1.compareTo(o2) : Character.compare(o1.charAt(n), o2.charAt(n)));
         
-        Arrays.sort(strings);
-        
-        char c = 'a';
-        
-        for(int i = 0, k = 0; i < 26; i++) {
-            for(String s : strings) {
-                if(s.charAt(n) == c + i)
-                    answer[k++] = s;
-            }
-        }
-        
-        return answer;
+        return strings;
     }
 }
