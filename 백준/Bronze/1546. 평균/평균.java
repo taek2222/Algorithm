@@ -1,28 +1,37 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class Main {
+class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int class_ = Integer.parseInt(br.readLine());
-        StringTokenizer score = new StringTokenizer(br.readLine());
-        int[] Score = new int[class_];
-        double total = 0;
+        int N = Integer.parseInt(br.readLine());
 
-        double max = (Score[0] = Integer.parseInt(score.nextToken()));
-
-        for(int i = 1; i < class_; i++) {
-            Score[i] = Integer.parseInt(score.nextToken());
-            if(max < Score[i])
-                max = Score[i];
+        List<Integer> numbers = new ArrayList<>();
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        while (st.hasMoreTokens()) {
+            int number = Integer.parseInt(st.nextToken());
+            numbers.add(number);
         }
 
-        for(int i = 0; i < class_; i++)
-            total += ((Score[i] / max) * 100.0);
+        Integer max = Collections.max(numbers);
 
-        System.out.print(total/class_);
+        double total = 0;
+        for (Integer number : numbers) {
+            total += (double) number / max * 100;
+        }
+
+        System.out.println(total / N);
+
+        br.close();
+        bw.close();
     }
 }
