@@ -9,8 +9,8 @@ import java.util.StringTokenizer;
 
 class Main {
 
-    static Map<Integer, List<Node>> nodes;
     static int V;
+    static Map<Integer, List<Node>> nodes;
     static boolean[] visit;
     static int max;
     static int lastNode;
@@ -47,11 +47,9 @@ class Main {
 
         max = 0;
         visit = new boolean[V + 1];
-        visit[1] = true;
         dfs(1, 0);
 
         visit = new boolean[V + 1];
-        visit[lastNode] = true;
         dfs(lastNode, 0);
 
         System.out.println(max);
@@ -63,12 +61,12 @@ class Main {
             max = len;
         }
 
-        List<Node> nodeList = nodes.getOrDefault(pos, new ArrayList<>());
+        visit[pos] = true;
+        List<Node> nodeList = nodes.get(pos);
         for (Node node : nodeList) {
             if (visit[node.end]) {
                 continue;
             }
-            visit[node.end] = true;
             dfs(node.end, len + node.value);
         }
     }
