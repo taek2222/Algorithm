@@ -1,7 +1,7 @@
 class Solution {
     public long solution(int a, int b, int[] g, int[] s, int[] w, int[] t) {
         long min = 1L;
-        long max = 2_000_000_000L * 200_000L;
+        long max = (long) (10e9 * 2 * 10e5 * 2);
         
         long answer = max;
         while(max >= min) {
