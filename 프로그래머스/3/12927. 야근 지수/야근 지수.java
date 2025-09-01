@@ -14,7 +14,7 @@ class Solution {
             }
             number--;
             n--;
-            queue.offer(number);
+            queue.add(number);
         }
         
         long answer = 0;
