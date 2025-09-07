@@ -19,9 +19,6 @@ class Solution {
     }
     
     private void dfs(int dia, int iron, int stone, String[] minerals, int mineralDepth, int fatigue, String currentPick) {
-        // System.out.println("다이아 곡 : " + dia + " 철 곡 : " + iron + " 돌 곡 : " + stone);
-        // System.out.println("동굴 깊이 : " + mineralDepth + " 피로도 : " + fatigue);
-        // System.out.println("현재 곡갱이 : " + currentPick);
 
         int maxPick = Math.min(minerals.length, mineralDepth + 5);
         for(int i = mineralDepth; i < maxPick; i++) {
