@@ -6,19 +6,17 @@ class Solution {
         
         Map<Integer, Integer> mandarins = new HashMap<>();
         for(int tang : tangerine) {
-            int value = mandarins.getOrDefault(tang, 0);
-            value++;
-            mandarins.put(tang, value);
+            mandarins.put(tang, mandarins.getOrDefault(tang, 0) + 1);
         }
         
-        List<Map.Entry<Integer, Integer>> list = new ArrayList<>(mandarins.entrySet());
-        list.sort(Map.Entry.<Integer, Integer>comparingByValue().reversed());
+        List<Integer> list = new ArrayList<>(mandarins.keySet());
+        list.sort((o1, o2) -> mandarins.get(o2) - mandarins.get(o1));
         
-        for (Map.Entry<Integer, Integer> entry : list) {
+        for (Integer key : list) {
             if(k <= 0) {
                 break;
             }
-            k -= entry.getValue();
+            k -= mandarins.get(key);
             answer++;
         }
         
