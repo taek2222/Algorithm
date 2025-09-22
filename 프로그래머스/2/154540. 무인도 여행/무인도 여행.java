@@ -15,36 +15,29 @@ class Solution {
         
         List<Integer> answers = new ArrayList<>();
         for(int i = 0; i < map.length; i++) {
-            String[] line = maps[i].split("");
             for(int j = 0; j < map[0].length; j++) {
-                if(line[j].equals("X")) {
-                    map[i][j] = 0;
-                    continue;
-                }
-                map[i][j] = Integer.parseInt(line[j]);
+                char c = maps[i].charAt(j);
+                if(c == 'X') map[i][j] = 0;
+                else map[i][j] = c - '0';
             }
         }
         
         for(int i = 0; i < map.length; i++) {
             for(int j = 0; j < map[0].length; j++) {
                 if(visit[i][j] || map[i][j] == 0) {
-                    visit[i][j] = true;
                     continue;
                 }
                 
                 value = 0;
-                visit[i][j] = true;
                 dfs(i, j);
                 answers.add(value);
             }
         }
         
-        int[] answer = new int[answers.size()];
-        for(int i = 0; i < answer.length; i++) {
-            answer[i] = answers.get(i);
-        }
-        
-        Arrays.sort(answer);
+        int[] answer = answers.stream()
+            .mapToInt(Integer::intValue)
+            .sorted()
+            .toArray();
         
         if(answers.size() == 0) {
             return new int[]{-1};
@@ -53,8 +46,8 @@ class Solution {
     }
     
     private void dfs(int x, int y) {
+        visit[x][y] = true;
         value += map[x][y];
-        System.out.println(value);
         
         for(int i = 0; i < xArray.length; i++) {
             int nextX = x + xArray[i];
@@ -68,7 +61,6 @@ class Solution {
                 continue;
             }
             
-            visit[nextX][nextY] = true;
             dfs(nextX, nextY);
         }
     }
