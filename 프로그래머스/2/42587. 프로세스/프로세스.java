@@ -14,20 +14,22 @@ class Solution {
     
     public int solution(int[] priorities, int location) {
         Deque<Process> deque = new ArrayDeque<>();
-        List<Integer> pri = new ArrayList<>();
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
         
         for(int i = 0; i < priorities.length; i++) {
             deque.add(new Process(priorities[i], i));
-            pri.add(priorities[i]);
+            maxHeap.add(priorities[i]);
         }
         
-        Collections.sort(pri, Collections.reverseOrder());
         int index = 0;
         
         while(!deque.isEmpty()) {
             Process element = deque.pop();
-            if(element.prioritie == pri.get(index)) {
+            
+            if(element.prioritie == maxHeap.peek()) {
                 index++;
+                maxHeap.poll();
+                
                 if(element.sequence == location) {
                     return index;
                 }
@@ -36,6 +38,6 @@ class Solution {
             }
         }
         
-        return 0;
+        return -1;
     }
 }
