@@ -8,9 +8,10 @@ class Solution {
     int count;
     
     public int[] solution(int m, int n, int[][] picture) {
-        
-        List<Integer> number = new ArrayList<>();
         visit = new boolean[m][n];
+        
+        int areaCount = 0;
+        int maxSize = 0;
         
         for(int i = 0; i < m; i++) {
             for(int j = 0; j < n; j++) {
@@ -22,16 +23,12 @@ class Solution {
                 visit[i][j] = true;
                 dfs(picture, i, j);
                 
-                number.add(count);
+                areaCount++;
+                maxSize = Math.max(maxSize, count);
             }
         }
         
-        Collections.sort(number, Collections.reverseOrder());
-        int[] answer = new int[2];
-        answer[0] = number.size();
-        answer[1] = number.get(0);
-        
-        return answer;
+        return new int[]{areaCount, maxSize};
     }
     
     public void dfs(int[][] picture, int x, int y) {
