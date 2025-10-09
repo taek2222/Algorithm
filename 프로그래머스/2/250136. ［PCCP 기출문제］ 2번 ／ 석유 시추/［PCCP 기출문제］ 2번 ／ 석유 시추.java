@@ -4,24 +4,22 @@ class Solution {
     
     int[] dx = new int[]{0, 0, -1, 1};
     int[] dy = new int[]{1, -1, 0, 0};
-    boolean[][] visit;
     int count;
-    
     
     public int solution(int[][] land) {
         Map<Integer, Integer> petroleum = new HashMap<>();
-        visit = new boolean[land.length][land[0].length];
         
+        int id = 2;
         for(int i = 0; i < land.length; i++) {
             for(int j = 0; j < land[0].length; j++) {
-                if(land[i][j] == 0 || visit[i][j]) {
+                if(land[i][j] != 1) {
                     continue;
                 }
-                visit[i][j] = true;
                 count = 0;
-                dfs(petroleum.size() + 1, land, i, j);
                 
-                petroleum.put(petroleum.size() + 1, count);
+                dfs(id, land, i, j);
+                petroleum.put(id, count);
+                id++;
             }
         }
         
@@ -29,7 +27,7 @@ class Solution {
         boolean[] checked;
         for(int i = 0; i < land[0].length; i++) {
             int total = 0;
-            checked = new boolean[petroleum.size() + 1];
+            checked = new boolean[id];
             for(int j = 0; j < land.length; j++) {
                 int index = land[j][i];
                 if(index == 0 || checked[index]) continue;
@@ -54,11 +52,10 @@ class Solution {
                 continue;
             }
             
-            if(visit[nextX][nextY] || land[nextX][nextY] == 0) {
+            if(land[nextX][nextY] != 1) {
                 continue;
             }
             
-            visit[nextX][nextY] = true;
             dfs(index, land, nextX, nextY);
         }
     }
