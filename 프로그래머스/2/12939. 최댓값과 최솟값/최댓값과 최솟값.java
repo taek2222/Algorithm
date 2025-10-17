@@ -1,18 +1,15 @@
 class Solution {
     public String solution(String s) {
-        int max = Integer.MIN_VALUE;
-        int min = Integer.MAX_VALUE;
         String[] numbers = s.split(" ");
-        for(int i = 0; i < numbers.length; i++) {
+        int first = Integer.parseInt(numbers[0]);
+        int max = first;
+        int min = first;
+        
+        for(int i = 1; i < numbers.length; i++) {
             int num = Integer.parseInt(numbers[i]);
             
-            if(max < num) {
-                max = num;
-            }
-            
-            if(min > num) {
-                min = num;
-            }
+            max = Math.max(max, num);
+            min = Math.min(min, num);
         }
         
         return "" + min + " " + max;
