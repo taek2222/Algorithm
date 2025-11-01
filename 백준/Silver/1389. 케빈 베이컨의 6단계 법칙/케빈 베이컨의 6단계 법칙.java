@@ -9,16 +9,6 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static class Node {
-        private int nextPos;
-        private int weighted;
-
-        public Node(final int nextPos, final int weighted) {
-            this.nextPos = nextPos;
-            this.weighted = weighted;
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -40,64 +30,44 @@ public class Main {
             friends.get(f2).add(f1);
         }
 
-        List<Integer> answers = new ArrayList<>();
-        // 1. 한 사람씩 전체 순환
-        for (int i = 1; i <= N; i++) {
-            List<Integer> kevinBacons = new ArrayList<>();
-            // 2. 한 사람씩 케빈 베이컨 구하기
-            for (int j = 1; j <= N; j++) {
-                if (i == j) {
-                    continue;
-                }
-
-                int kevinBacon = 0;
-                boolean flag = false;
-
-                boolean[] visit = new boolean[N + 1];
-                visit[i] = true;
-                Deque<Node> deque = new ArrayDeque<>();
-                deque.add(new Node(i, 1));
-                while (!deque.isEmpty()) {
-                    Node current = deque.pop();
-
-                    List<Integer> nextPositions = friends.get(current.nextPos);
-                    for (int nextPosition : nextPositions) {
-                        if (nextPosition == j) {
-                            kevinBacon = current.weighted;
-                            flag = true;
-                            break;
-                        }
-
-                        if (visit[nextPosition]) {
-                            continue;
-                        }
-                        visit[nextPosition] = true;
-                        deque.add(new Node(nextPosition, current.weighted + 1));
-                    }
-
-                    if (flag) {
-                        break;
-                    }
-                }
-
-                kevinBacons.add(kevinBacon);
-            }
-
-            int total = 0;
-            for (int kevinBacon : kevinBacons) {
-                total += kevinBacon;
-            }
-
-            answers.add(total);
-        }
-
         int answer = 0;
-        for (int i = 1; i < answers.size(); i++) {
-            if (answers.get(answer) > answers.get(i)) {
+        int minSum = Integer.MAX_VALUE;
+        for (int i = 1; i <= N; i++) {
+            int kevinBacon = bfs(N, i, friends);
+            if (minSum > kevinBacon) {
+                minSum = kevinBacon;
                 answer = i;
             }
         }
 
-        System.out.println(answer + 1);
+        System.out.println(answer);
+    }
+
+    private static int bfs(final int N, final int start, final List<List<Integer>> friends) {
+        boolean[] visit = new boolean[N + 1];
+        int[] dist = new int[N + 1];
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.add(start);
+
+        visit[start] = true;
+        while (!deque.isEmpty()) {
+            int current = deque.pop();
+
+            for (int nextPosition : friends.get(current)) {
+                if (visit[nextPosition]) {
+                    continue;
+                }
+
+                visit[nextPosition] = true;
+                dist[nextPosition] = dist[current] + 1;
+                deque.add(nextPosition);
+            }
+        }
+
+        int total = 0;
+        for (int distance : dist) {
+            total += distance;
+        }
+        return total;
     }
 }
