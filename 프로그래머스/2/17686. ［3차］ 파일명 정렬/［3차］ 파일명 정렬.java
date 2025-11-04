@@ -6,18 +6,16 @@ class Solution {
         
         for(String file : files) {
             int headIndex = 0;
-            char nextChar = file.charAt(headIndex);
-            while(!isNumber(nextChar)) {
+            while(!isNumber(file.charAt(headIndex))) {
                 headIndex++;
-                nextChar = file.charAt(headIndex);
             }
-            String head = file.substring(0, headIndex);
-            
+
             int numberIndex = headIndex;
             while(numberIndex < file.length() && isNumber(file.charAt(numberIndex))) {
                 numberIndex++;
             }
             
+            String head = file.substring(0, headIndex);
             String number = file.substring(headIndex, numberIndex);
             String tail = file.substring(numberIndex, file.length());
             
@@ -33,7 +31,6 @@ class Solution {
             if(compare == 0) {
                 return a1Number.compareTo(a2Number);
             }
-            
             return compare;
         });
         
