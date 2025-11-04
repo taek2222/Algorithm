@@ -2,55 +2,51 @@ import java.util.*;
 
 class Solution {
     public String[] solution(String[] files) {
-        List<String[]> fileZip = new ArrayList<>();
+        List<String[]> fileDivides = new ArrayList<>();
         
         for(String file : files) {
-            StringBuilder head = new StringBuilder();
-            StringBuilder number = new StringBuilder();
+            int headIndex = 0;
+            char nextChar = file.charAt(headIndex);
+            while(!isNumber(nextChar)) {
+                headIndex++;
+                nextChar = file.charAt(headIndex);
+            }
+            String head = file.substring(0, headIndex);
             
-            int i = 0;
-            for(; i < file.length(); i++) {
-                char c = file.charAt(i);
-                if(c >= '0' && c <= '9') {
-                    break;
-                }
-                
-                head.append(String.valueOf(c));
+            int numberIndex = headIndex;
+            while(numberIndex < file.length() && isNumber(file.charAt(numberIndex))) {
+                numberIndex++;
             }
             
-            for(; i < file.length(); i++) {
-                char c = file.charAt(i);
-                if(c < '0' || c > '9' || number.length() == 5) {
-                    break;
-                }
-                
-                number.append(String.valueOf(c));
-            }
+            String number = file.substring(headIndex, numberIndex);
+            String tail = file.substring(numberIndex, file.length());
             
-            String tail = file.substring(i, file.length());
-            
-            fileZip.add(new String[]{head.toString(), number.toString(), tail});
+            String[] array = new String[]{head, number, tail};
+            fileDivides.add(array);
         }
         
-        Collections.sort(fileZip, ((s1, s2) -> {
-            if(s1[0].toUpperCase().compareTo(s2[0].toUpperCase()) == 0) {
-                return Integer.compare(Integer.parseInt(s1[1]), Integer.parseInt(s2[1]));
+        Collections.sort(fileDivides, (a1, a2) -> {
+            int compare = a1[0].toUpperCase().compareTo(a2[0].toUpperCase());
+            Integer a1Number = Integer.parseInt(a1[1]);
+            Integer a2Number = Integer.parseInt(a2[1]);
+            
+            if(compare == 0) {
+                return a1Number.compareTo(a2Number);
             }
-            return s1[0].toUpperCase().compareTo(s2[0].toUpperCase());
-        }));
+            
+            return compare;
+        });
         
-        String[] answer = new String[fileZip.size()];
-        for(int i = 0; i < fileZip.size(); i++) {
-            String[] element = fileZip.get(i);
-            
-            StringBuilder sb = new StringBuilder();
-            sb.append(element[0]);
-            sb.append(element[1]);
-            sb.append(element[2]);
-            
-            answer[i] = sb.toString();
+        String[] answer = new String[fileDivides.size()];
+        for(int i = 0; i < answer.length; i++) {
+            String[] divide = fileDivides.get(i);
+            answer[i] = divide[0] + divide[1] + divide[2];
         }
         
         return answer;
+    }
+    
+    public boolean isNumber(char ch) {
+        return ch >= '0' && ch <= '9';
     }
 }
