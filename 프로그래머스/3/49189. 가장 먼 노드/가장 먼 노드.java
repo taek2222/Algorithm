@@ -3,54 +3,61 @@ import java.util.*;
 class Solution {
     
     class Node {
-        int vertex, distance;
+        int pos;
+        int weight;
         
-        Node(int vertex, int distance) {
-            this.vertex = vertex;
-            this.distance = distance;
+        public Node(int pos, int weight) {
+            this.pos = pos;
+            this.weight = weight;
         }
     }
     
     public int solution(int n, int[][] edge) {
-        ArrayList<Integer>[] list = new ArrayList[n+1];
-        int[] cost = new int[n+1];
-    
-        for(int i = 0; i <= n; i++)
-            list[i] = new ArrayList<>();
+        List<List<Integer>> edges = new ArrayList<>();
         
-        // 간선 연결
-        for(int i = 0; i < edge.length; i++) {
-            list[edge[i][0]].add(edge[i][1]);
-            list[edge[i][1]].add(edge[i][0]);
+        for(int i = 0; i <= n; i++) edges.add(new ArrayList<>()); 
+        for(int[] e : edge) {
+            List<Integer> value = edges.get(e[0]);
+            value.add(e[1]);
+            
+            value = edges.get(e[1]);
+            value.add(e[0]);
         }
         
-        // BFS 알고리즘 사용
-        ArrayDeque<Node> queue = new ArrayDeque<>();
-        Arrays.fill(cost, Integer.MAX_VALUE);
-        cost[0] = cost[1] = 0;
-        queue.add(new Node(1, 0));
+        boolean[] visit = new boolean[n + 1];
+        visit[1] = true;
+        Deque<Node> deque = new ArrayDeque<>();
+        deque.add(new Node(1, 1));
         
-        while(!queue.isEmpty()) {
-            Node now = queue.poll();
-            // System.out.println("간선 : " + now.vertex + " 가중치 : " + now.distance);
+        int answer = 0;
+        int maxWeight = 0;
+        while(!deque.isEmpty()) {
+            Node current = deque.poll();
             
-            for(int vertex : list[now.vertex]) {
-                if(cost[vertex] <= now.distance + 1)
-                    continue;
-                
-                cost[vertex] = now.distance + 1;
-                queue.add(new Node(vertex, now.distance + 1));
+            if(maxWeight < current.weight) {
+                answer = 0;
+                maxWeight = current.weight;
+            }
+            
+            if(maxWeight == current.weight) {
+                answer++;
+            }
+            
+            List<Integer> list = edges.get(current.pos);
+            for(int element : list) {
+                if(visit[element]) continue;
+                visit[element] = true;
+                deque.add(new Node(element, current.weight + 1));
             }
         }
         
-        int max = 0;
-        for(int i = 1; i < cost.length; i++)
-            max = Math.max(cost[i], max);
-        
-        int count = 0;
-        for(int i = 1; i < cost.length; i++)
-            if(cost[i] == max) count++;
-        
-        return count;
+        return answer;
     }
 }
+
+/**
+    1. 번호 별로 노드 다 종합 (양쪽다)
+    2. BFS로 탐색 (방문 노드 처리)
+    3. 지금까지 최대인지 확인 (노드 객체 필요할듯)
+    4. 현재 기준으로 더 먼 노드가 나온다? 다 초기화후 1부터 시작
+**/
