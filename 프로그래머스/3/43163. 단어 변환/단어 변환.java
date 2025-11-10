@@ -1,56 +1,63 @@
-import java.util.Deque;
-import java.util.ArrayDeque;
+import java.util.*;
 
 class Solution {
     
     class Word {
-        public String word;
-        public int count;
+        String word;
+        int loopCount;
         
-        public Word(String word, int count) {
+        public Word(String word, int loopCount) {
             this.word = word;
-            this.count = count;
+            this.loopCount = loopCount;
         }
     }
     
     public int solution(String begin, String target, String[] words) {
         
-        boolean[] visit = new boolean[words.length];
-        
         Deque<Word> deque = new ArrayDeque<>();
         deque.add(new Word(begin, 0));
         
+        boolean[] visit = new boolean[words.length];
+        
         while(!deque.isEmpty()) {
-            Word current = deque.pop();
+            Word current = deque.poll();
+            String currentWord = current.word;
+            int loopCount = current.loopCount;
+            
             for(int i = 0; i < words.length; i++) {
-                if(visit[i] || current.word.equals(words[i])) {
-                    continue;
+                if(currentWord.equals(target)) {
+                    return loopCount;
                 }
                 
-                if(check(current.word, words[i])) {
-                    continue;
+                if(checkWord(currentWord, words[i])) {
+                    if(visit[i]) {
+                        continue;
+                    }
+                    visit[i] = true;
+                    deque.add(new Word(words[i], loopCount + 1));
                 }
-                
-                if(words[i].equals(target)) {
-                    return current.count + 1;
-                }
-                
-                visit[i] = true;
-                deque.add(new Word(words[i], current.count + 1));
             }
         }
-        
         return 0;
     }
     
-    private boolean check(String begin, String target) {
+    public boolean checkWord(String word, String otherWord) {
         int count = 0;
-        for(int i = 0; i < begin.length(); i++) {
-            if(begin.charAt(i) == target.charAt(i)) {
+        for(int i = 0; i < word.length(); i++) {
+            char wordCh = word.charAt(i);
+            char otherWordCh = otherWord.charAt(i);
+            
+            if(wordCh != otherWordCh) {
                 count++;
             }
         }
-        
-        return count != begin.length() - 1;
+        return count == 1;
     }
 }
+
+/**
+    1. begin 넣고
+    2. words 돌면서 하나 차이나는 것만 큐에 저장
+    3. 방문한 단어는 제외
+    4. 찾다가 tartget 나오면 끝
+**/
