@@ -4,28 +4,27 @@ class Solution {
     public long solution(int n, int[] times) {
         
         Arrays.sort(times);
-        long max = times[times.length - 1];
-        long min = times[0];
         
-        max = max * n; 
+        long answer = 0;
+        long left = 0;
+        long right = times[times.length - 1] * (long) n;
         
-        long answer = max;
-        while(min <= max) {
-            long mid = (max + min) / 2;
+        while(left <= right) {
+            long mid = (left + right) / 2;
             
-            long count = 0;
-            for(int time : times) {
-                count += mid / time;
+            long complate = 0;
+            for(int i = 0; i < times.length; i++) {
+                complate += mid / times[i];
             }
             
-            if(count < n) {
-                min = mid + 1;
+            if(n <= complate) {
+                right = mid - 1;
+                answer = mid;
             } else {
-                answer = Math.min(answer, mid);
-                max = mid - 1;
+                left = mid + 1;
             }
         }
         
-        return answer;
+        return left;
     }
 }
